@@ -5,7 +5,7 @@
     "scripts": {
         "server:start": "NODE_ENV=production node server/app.js",
         "server:start:test": "NODE_ENV=testing nodemon -L --watch ./server ./server/app.js",
-        "server:start:dev": "NODE_ENV=development nodemon -L --watch ./server ./server/app.js",
+        "server:start:dev": "NODE_ENV=development nodemon -L --watch ./server ./server/app.js -- --envFile=secrets/env.dev",
         "test": "jest ./server",
         "lint": "esw --watch --color ./server"
     },
@@ -27,11 +27,13 @@
         "standard": "^16.0.3"
     },
     "dependencies": {
-        "@cullylarson/p": "^0.1.0",
+        "@cullylarson/f": "^0.1.2",
         "@cullylarson/validate": "^1.0.15",
         "body-parser": "^1.19.0",
         "cors": "^2.8.5",
+        "dotenv": "^8.3.0",
         "express": "^4.17.1",
-        "module-alias": "^2.2.2"
+        "module-alias": "^2.2.2",
+        "yargs": "^15.4.1"
     }
 }

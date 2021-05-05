@@ -7,20 +7,28 @@ const PageNotFoundError = require('./lib/errors/PageNotFoundError')
 const {ConsoleLogger, LogLevels} = require('./lib/logger')
 const TokenRouter = require('./token')
 
-const port = process.env.PORT || 3000
-const app = express()
+const getConfig = envFile => {
+    require('dotenv').config({path: envFile})
 
-const logger = process.env.LOG_ENABLED
-    ? ConsoleLogger()
-    : () => {}
+    const port = process.env.PORT || 3000
+    const logEnabled = Boolean(process.env.LOG_ENABLED)
 
-const corsOrigins = (process.env.CORS_ORIGINS || '')
-    .split(',')
-    .map(x => x.trim())
-    .map(x => x.replace(/\/$/, '')) // remove trailing slash
+    const corsOrigins = (process.env.CORS_ORIGINS || '')
+        .split(',')
+        .map(x => x.trim())
+        .map(x => x.replace(/\/$/, '')) // remove trailing slash
+
+    const corsMethods = process.env.CORS_METHODS || 'GET, POST, DELETE'
+
+    return {
+        port,
+        logEnabled,
+        corsOrigins,
+        corsMethods,
+    }
+}
 
 const CheckError = (logger) => (err, req, res, next) => {
-    console.log(err.name)
     switch(err.name) {
         case 'PageNotFoundError':
             return res.status(404).json(responseError(messageObj('page-not-found', 'Page not found.')))
@@ -51,6 +59,26 @@ const CheckError = (logger) => (err, req, res, next) => {
     }
 }
 
+const {envFile} = require('yargs')
+    .usage('Usage: $0 [options]')
+    .help('h')
+    .options({
+        envFile: {
+            describe: 'Load environment variables from a file.',
+            default: '.env',
+            type: 'string',
+        },
+    })
+    .argv
+
+const config = getConfig(envFile)
+
+const app = express()
+
+const logger = config.logEnabled
+    ? ConsoleLogger
+    : () => {}
+
 // if we have an uncaught exception, something really bad happened. we want to restart
 // so that the service doesn't stay in an unexpected state.
 process.on('uncaughtException', err => {
@@ -78,14 +106,14 @@ app.use(cors({
         // - an origin is *
         // - or, origin is in the list
         // - or, no origin, which means it isn't a CORS request (i.e. not from a browser)
-        if(corsOrigins.includes('*') || corsOrigins.includes(origin) || !origin) {
+        if(config.corsOrigins.includes('*') || config.corsOrigins.includes(origin) || !origin) {
             return callback(null, true)
         }
         else {
             return callback(new Error('Not allowed by CORS.'))
         }
     },
-    methods: process.env.CORS_METHODS || 'GET, POST, DELETE',
+    methods: config.corsMethods,
 }))
 
 const handle404 = (req, res, next) => {
@@ -105,4 +133,4 @@ app.use('/v1/token', TokenRouter(logger))
 app.use(handle404)
 app.use(CheckError(logger))
 
-app.listen(port)
+app.listen(config.port)

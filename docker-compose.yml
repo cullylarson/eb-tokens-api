@@ -12,4 +12,3 @@ services:
     command: "npm run server:start:dev"
     environment:
       TZ: "Etc/UTC"
-      PORT: 3000
