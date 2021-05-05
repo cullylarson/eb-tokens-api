@@ -1,0 +1,29 @@
+version: '3'
+services:
+  www:
+    container_name: eb-tokens-test-www
+    image: "node:14"
+    user: "node"
+    working_dir: "/home/node/app"
+    volumes:
+      - "./:/home/node/app:ro"
+    ports:
+      - "3000:3000"
+    command: "npm run server:start:test"
+    environment:
+      TZ: "Etc/UTC"
+  test:
+    depends_on:
+      - www
+    container_name: eb-tokens-test-run
+    image: "node:14"
+    user: "node"
+    working_dir: "/home/node/app"
+    volumes:
+      - "./:/home/node/app"
+    command: "integration/wait-for-it.sh www:3000 -- npm run test:integration:run"
+    environment:
+      TZ: "Etc/UTC"
+      API_DOMAIN: www
+    env_file:
+        - secrets/env.test

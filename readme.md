@@ -42,8 +42,13 @@ When setting up the service for development, you must use `secrets/env.dev` as t
 
 2. Run `npm run lint` to lint the project.
 
-3. Run `npm run test` to test.
+You can run the service using the provided `docker-compose.yml` file using `docker-compose up -d`. The service will be listening on port 3000 (unless changed in the env file).
 
+## Testing
+
+There are two kinds of tests you can run on this service: unit (`npm run test:unit`) and integration (`npm run test:integration`). Unit tests are just run locally using jest. The integration test are run inside Docker, against the API itself.
+
+To run the integration tests, you will need to create an env file in `secrets/env.test`
 
 ## API
 
