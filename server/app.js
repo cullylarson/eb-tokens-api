@@ -31,19 +31,6 @@ const CheckError = (logger) => (err, req, res, next) => {
     switch(err.name) {
         case 'PageNotFoundError':
             return res.status(404).json(responseError(messageObj('page-not-found', 'Page not found.')))
-        case 'SyntaxError':
-            // TODO -- might not need to catch this error if no endpoint requires JSON
-
-            logger(
-                'app-response-error-json',
-                LogLevels.NOTICE,
-                'Response: JSON format syntax error.',
-                {},
-                req,
-                err,
-            )
-
-            return res.status(400).json(responseError(messageObj('bad-json', 'Your JSON request is not formatted correctly.')))
         default:
             logger(
                 'app-response-error-unknown',
