@@ -10,6 +10,7 @@ const fetchAndValidateToken = () => {
         .expect(res => {
             const token = res.body.token
 
+            expect(token).toBeDefined()
             expect(token.length).toBe(10)
             expect(token.charAt(0)).toBe('9')
             expect(validate(token)).toBe(true)

@@ -8,6 +8,8 @@ const validateToken = (token, expectValid = true, expectReasonCode = null) => {
         .expect(200)
         .expect('Content-Type', /json/)
         .expect(res => {
+            expect(res.body.isValid).toBeDefined()
+
             if(expectValid) {
                 expect(res.body.isValid).toBe(true)
             }
@@ -16,6 +18,8 @@ const validateToken = (token, expectValid = true, expectReasonCode = null) => {
             }
 
             if(expectReasonCode) {
+                expect(res.body.reasons).toBeDefined()
+
                 expect(Boolean(res.body.reasons.length)).toBe(true)
 
                 const reason = res.body.reasons.find(x => x.code === expectReasonCode)
