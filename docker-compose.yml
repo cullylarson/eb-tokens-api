@@ -1,0 +1,15 @@
+version: '3'
+services:
+  www:
+    container_name: eb-tokens-www
+    image: "node:14"
+    user: "node"
+    working_dir: "/home/node/app"
+    volumes:
+      - "./:/home/node/app:ro"
+    ports:
+      - "3000:3000"
+    command: "npm run server:start:dev"
+    environment:
+      TZ: "Etc/UTC"
+      PORT: 3000

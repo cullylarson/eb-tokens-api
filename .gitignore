@@ -1,0 +1,8 @@
+**/.DS_Store
+.idea
+.env
+vendor
+node_modules
+npm-debug.log
+
+/secrets
