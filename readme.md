@@ -38,7 +38,7 @@ Build the project (see the Setup section) and deploy using the environment of yo
 
 When setting up the service for development, you must use `secrets/env.dev` as the name of your env file (see the Configuration section).
 
-1. Start the server using `npm run server:start:dev`. This will start the serer and reload on changes to files in the `./server` folder.
+1. Start the server using `npm run server:start:dev`. This will start the serer and reload on any change to files in the `./server` folder.
 
 2. Run `npm run lint` to lint the project.
 
@@ -63,7 +63,9 @@ No parameters are accepted by this endpoint.
 #### Response
 
 Content Type: application/json
-Status: 200 in all cases (i.e. whether the token is valid or not).
+
+Status: 200
+
 Parameters:
 
 - **token** *(string)*. The EB Token.
@@ -82,10 +84,12 @@ Parameters should be passed in the URL.
 #### Response
 
 Content Type: application/json
-Status: 200 in all cases (i.e. whether the token is valid or not). TODO -- maybe not if the token is not provided? Maybe not if its invalid in any case?
+
+Status: 200 in all cases (i.e. whether the token is valid or not).
+
 Parameters:
 
 - **isValid** *(boolean)*. A boolean value indicating whether the provided token is valid (i.e. true if valid, false if not).
-- **reasons** *(object[])*. If the token is not valid, this will be an array of objects that specifically what was wrong with the token provided. Each object in the array has these values:
-    - **code** *(string)*. An error code. This code identifies what went wrong. It will not change for the current API version.
+- **reasons** *(object[])*. If the token is not valid, this will be an array of objects that specify what was wrong with the token provided. Each object in the array has these values:
+    - **code** *(string)*. An error code. This code identifies what went wrong. It will not change for the current API version. See `server/token/token-controller.js` for a list of possible codes.
     - **message** *(string)*. A human-readable error message that could be displayed to end-users. This message may change, but will always describe the error.
