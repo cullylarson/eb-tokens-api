@@ -1,10 +1,9 @@
 require('module-alias/register')
 const express = require('express')
 const cors = require('cors')
-const {messageObj} = require('@cullylarson/validate')
-const {responseError} = require('./lib/response')
-const PageNotFoundError = require('./lib/errors/PageNotFoundError')
-const {ConsoleLogger, LogLevels} = require('./lib/logger')
+const {responseError, messageObj} = require('@@app/lib/response')
+const PageNotFoundError = require('@@app/lib/errors/PageNotFoundError')
+const {ConsoleLogger, LogLevels} = require('@@app/lib/logger')
 const TokenRouter = require('./token')
 
 const getConfig = envFile => {

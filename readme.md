@@ -49,7 +49,7 @@ When setting up the service for development, you must use `secrets/env.dev` as t
 
 ### GET `/v1/token`
 
-Generates a new EB Token.
+Generates a new, cryptographically random EB Token.
 
 #### Request
 
@@ -77,8 +77,10 @@ Parameters should be passed in the URL.
 #### Response
 
 Content Type: application/json
-Status: 200 in all cases (i.e. whether the token is valid or not). TODO -- maybe not if the token is not provided? Maybe not if its invalid in any case.
+Status: 200 in all cases (i.e. whether the token is valid or not). TODO -- maybe not if the token is not provided? Maybe not if its invalid in any case?
 Parameters:
 
 - **isValid** *(boolean)*. A boolean value indicating whether the provided token is valid (i.e. true if valid, false if not).
-- **reasons** *(object[])*. If the token is not valid, this will be an array of objects that specifically what was wrong with the token provided.TODO
+- **reasons** *(object[])*. If the token is not valid, this will be an array of objects that specifically what was wrong with the token provided. Each object in the array has these values:
+    - **code** *(string)*. An error code. This code identifies what went wrong. It will not change for the current API version.
+    - **message** *(string)*. A human-readable error message that could be displayed to end-users. This message may change, but will always describe the error.
