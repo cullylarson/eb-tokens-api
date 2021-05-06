@@ -1,6 +1,6 @@
 {
     "name": "eb-tokens-api",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "description": "A REST API for generating and validating Echobind Tokens.",
     "scripts": {
         "server:start": "NODE_ENV=production node server/app.js",
