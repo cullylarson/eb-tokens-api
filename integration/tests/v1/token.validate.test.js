@@ -76,3 +76,11 @@ test('Token invalid because does not pass luhn.', async () => {
         validateToken('9160192922', false, 'bad-checksum'),
     ])
 })
+
+test('Token invalid because not all numeric.', async () => {
+    return Promise.all([
+        validateToken('99076788a3', false, 'not-numeric'),
+        validateToken('9907Z78883', false, 'not-numeric'),
+        validateToken('9---------', false, 'not-numeric'),
+    ])
+})

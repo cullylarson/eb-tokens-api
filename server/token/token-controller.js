@@ -29,6 +29,10 @@ module.exports = {
             return respondNotValid(messageObj('wrong-length', 'The token must be 10 digits long.'))
         }
 
+        if(/[^0-9]/.test(token)) {
+            return respondNotValid(messageObj('not-numeric', 'The token must be made of only numbers.'))
+        }
+
         if(!validate(token)) {
             return respondNotValid(messageObj('bad-checksum', 'The token you have provided does not have a valid checksum.'))
         }
