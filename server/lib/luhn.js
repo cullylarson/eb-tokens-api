@@ -1,39 +1,4 @@
-const {randomBytes} = require('crypto')
-
-const numericCharacters = '0123456789'.split('')
-
-// taken from https://github.com/sindresorhus/crypto-random-string/blob/main/index.js
-const generateForCustomCharacters = (length, characters) => {
-    // Generating entropy is faster than complex math operations, so we use the simplest way
-    const characterCount = characters.length
-    const maxValidSelector = (Math.floor(0x10000 / characterCount) * characterCount) - 1 // Using values above this will ruin distribution when using modular division
-    const entropyLength = 2 * Math.ceil(1.1 * length) // Generating a bit more than required so chances we need more than one pass will be really low
-    let string = ''
-    let stringLength = 0
-
-    while (stringLength < length) { // In case we had many bad values, which may happen for character sets of size above 0x8000 but close to it
-        const entropy = randomBytes(entropyLength)
-        let entropyPosition = 0
-
-        while (entropyPosition < entropyLength && stringLength < length) {
-            const entropyValue = entropy.readUInt16LE(entropyPosition)
-            entropyPosition += 2
-            if (entropyValue > maxValidSelector) { // Skip values which will ruin distribution when using modular division
-                continue
-            }
-
-            string += characters[entropyValue % characterCount]
-            stringLength++
-        }
-    }
-
-    return string
-}
-
-// adapted from https://github.com/sindresorhus/crypto-random-string/blob/main/index.js
-const cryptoRandomnNumberString = (length) => {
-    return generateForCustomCharacters(length, numericCharacters)
-}
+const cryptoRandomString = require('crypto-random-string')
 
 // taken from https://github.com/rromanovsky/luhn-generator/blob/master/src/index.js
 const getChecksum = (input) => {
@@ -69,7 +34,7 @@ const generate = ({
     // if we have a leading digit, then the random number is (generateLength - 1) since we already have the leading digit
     const randLength = (leadingDigit !== null) ? (generateLength - 1) : generateLength
 
-    const randNumStr = cryptoRandomnNumberString(randLength)
+    const randNumStr = cryptoRandomString({length: randLength, type: 'numeric'})
 
     const numStr = (leadingDigit !== null) ? ('' + leadingDigit + randNumStr) : randNumStr
 

@@ -32,7 +32,7 @@
     "dependencies": {
         "@cullylarson/f": "^0.1.2",
         "cors": "^2.8.5",
-        "crypto-random-string": "^4.0.0",
+        "crypto-random-string": "^3.3.1",
         "dotenv": "^8.3.0",
         "express": "^4.17.1",
         "fast-luhn": "^2.0.0",
